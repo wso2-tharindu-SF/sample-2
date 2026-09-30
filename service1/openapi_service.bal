@@ -15,6 +15,9 @@ service / on ep0 {
         service2:CatalogResponse catalogResponse = check service2Client->/catalog.get();
         service2:Record[] records = catalogResponse.records;
         log:printInfo("average score request handled", recordCount = records.length());
+        if records.length() == 0 {
+            return {average: 0};
+        }
         int totalScore = 0;
         foreach service2:Record 'record in records {
             totalScore += 'record.score;
