@@ -1,0 +1,8 @@
+title sample-2
+
+component service1 as "Average Score API" service
+component service2 as "Scored Catalog Service" service
+
+north -> service1
+
+service1 -> service2

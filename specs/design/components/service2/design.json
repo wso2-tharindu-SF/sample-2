@@ -1,0 +1,14 @@
+{
+  "name": "service2",
+  "type": "service",
+  "version": "0.1.0",
+  "language": "Ballerina",
+  "buildpack": "docker",
+  "appPath": "service2",
+  "entrypoint": "deployment/service",
+  "exposure": "intranet",
+  "dependencies": [],
+  "description": "Holds the fixed, seeded catalog of ten scored records and serves it, as-is, to service1. Starts in full mode. Exposes an internal-only operations endpoint that switches it between full mode (all ten records) and empty mode (no records) — reachable only by an Internal Operator, never by an API Consumer and never through service1. Performs no computation over the records; averaging is service1's job.",
+  "stories": [3, 4],
+  "skillsPinned": ["openapi-conventions", "ballerina"]
+}

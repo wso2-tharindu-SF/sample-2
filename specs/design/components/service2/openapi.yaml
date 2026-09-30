@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Scored Catalog Service
+  description: Serves a fixed catalog of scored records, switchable between full and empty mode via an internal-only operations endpoint.
+  version: 0.1.0
+servers:
+  - url: /
+paths:
+  /catalog:
+    get:
+      operationId: getCatalog
+      summary: The catalog service2 is currently serving (full or empty)
+      responses:
+        '200':
+          description: The current catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogResponse'
+  /operations/mode:
+    get:
+      operationId: getCatalogMode
+      summary: The catalog's current mode
+      responses:
+        '200':
+          description: The current mode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeResponse'
+    put:
+      operationId: setCatalogMode
+      summary: Switch the catalog between full mode and empty mode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModeRequest'
+      responses:
+        '200':
+          description: The mode was switched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeResponse'
+        '400':
+          description: The requested mode is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Record:
+      type: object
+      required: [id, name, score]
+      properties:
+        id: { type: integer, description: record identifier }
+        name: { type: string, description: record name }
+        score: { type: integer, description: record score }
+    CatalogResponse:
+      type: object
+      required: [records]
+      properties:
+        records:
+          type: array
+          description: every record in the catalog's current mode (empty in empty mode)
+          items:
+            $ref: '#/components/schemas/Record'
+    ModeRequest:
+      type: object
+      required: [mode]
+      properties:
+        mode:
+          type: string
+          enum: [full, empty]
+          description: the mode to switch the catalog to
+    ModeResponse:
+      type: object
+      required: [mode]
+      properties:
+        mode:
+          type: string
+          enum: [full, empty]
+          description: the catalog's mode
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: integer, description: HTTP or application error code }
+        message: { type: string, description: short human-readable label }
+        description: { type: string, description: detailed explanation }
+        moreInfo: { type: string, description: URI to documentation }

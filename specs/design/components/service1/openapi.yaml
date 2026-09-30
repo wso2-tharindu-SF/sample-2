@@ -1,0 +1,40 @@
+openapi: 3.0.3
+info:
+  title: Average Score API
+  description: Returns the whole-number average score of whatever catalog service2 is currently serving. Any path not defined here returns a structured 404 body.
+  version: 0.1.0
+servers:
+  - url: /
+paths:
+  /average-score:
+    get:
+      operationId: getAverageScore
+      summary: The average score of the catalog service2 is currently serving
+      responses:
+        '200':
+          description: The whole-number average score
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AverageScoreResponse'
+components:
+  schemas:
+    AverageScoreResponse:
+      type: object
+      required: [average]
+      properties:
+        average:
+          type: integer
+          description: sum of every record's score divided by the record count, remainder discarded
+    Error:
+      description: >-
+        The structured body returned for any request to a path this API does
+        not serve. Not a documented response of any operation above — it is
+        the shape service1's catch-all not-found handler returns.
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: integer, description: HTTP or application error code }
+        message: { type: string, description: short human-readable label }
+        description: { type: string, description: detailed explanation }
+        moreInfo: { type: string, description: URI to documentation }

@@ -1,0 +1,16 @@
+{
+  "name": "service1",
+  "type": "service",
+  "version": "0.1.0",
+  "language": "Ballerina",
+  "buildpack": "docker",
+  "appPath": "service1",
+  "entrypoint": "deployment/service",
+  "exposure": "internet",
+  "dependencies": [
+    { "kind": "component", "name": "service2", "description": "Fetches the current catalog (full or empty) to compute its average score." }
+  ],
+  "description": "Public API that an API Consumer calls to get the current average score. Asks service2 for whatever catalog it is currently serving, sums the scores, divides by the record count, and returns the whole-number result — the same computation for every catalog service2 can serve. Also answers any request to a path it does not serve with a structured 404 body. Does not hold or mutate any catalog data itself, and never exposes service2's mode-switch capability.",
+  "stories": [1, 2],
+  "skillsPinned": ["openapi-conventions", "ballerina"]
+}
